@@ -47,14 +47,15 @@ def main():
 
             t = Task()
             t.name = 'Incrementation {}'.format(i)
-            t.executable = '~/inc.py'
+            t.pre_exec = ['source /home/vhayot/miniconda3/etc/profile.d/conda.sh', 'conda activate radenv']
+            t.executable = 'python /home/vhayot/inc.py'
 
             if i == 0:
                 t.arguments = [fp, out_dir, i]
             else:
                 # Note: assuming all data is accessible through shared dir
                 # radical entk functions without sharedfs, however
-                t.arguments = [op.join(out_dir, "it-{0}-{1}".format(i, op.basename(fp))), out_dir, i]
+                t.arguments = [op.join(out_dir, "it-{0}-{1}".format(i-1, op.basename(fp))), out_dir, i]
 
             s.add_tasks(t)
 
@@ -66,7 +67,7 @@ def main():
 
     appman.resource_desc = {
         'resource': 'xsede.bridges',
-        'walltime': 10,
+        'walltime': 20,
         'cpus': 5,
         'project': 'mc3bggp',
         'schema': 'gsissh'
